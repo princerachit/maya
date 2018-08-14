@@ -8,10 +8,22 @@ import (
 	"github.com/golang/glog"
 	"github.com/openebs/maya/types/v1"
 	"github.com/openebs/maya/volume/provisioners/jiva"
+	"github.com/openebs/maya/pkg/util"
 )
 
 // SnapshotSpecificRequest deals with snapshot API request w.r.t a Volume
 func (s *HTTPServer) snapshotSpecificRequest(resp http.ResponseWriter, req *http.Request) (interface{}, error) {
+	// check the feature gate & switch if enabled
+	feature, err := util.CASTemplateFeatureGate()
+	if err != nil {
+		// log and return http error 500
+		glog.Errorf("invalid feature gate value for %s only boolean values allowed", util.CASTemplateFeatureGateENVK)
+		return nil, CodedError(500, http.StatusText(500))
+	}
+	if feature {
+		return s.snapshotV1alpha1SpecificRequest(resp, req)
+	}
+
 	// Extract info from path after trimming
 	path := strings.TrimPrefix(req.URL.Path, "/latest/snapshots")
 

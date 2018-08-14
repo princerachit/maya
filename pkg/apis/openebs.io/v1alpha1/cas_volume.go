@@ -66,6 +66,9 @@ const (
 	// StorageClassHeaderKey is the key to fetch name of StorageClass
 	// This key is present only in get request headers
 	StorageClassHeaderKey CASKey = "storageclass"
+
+	// VolumeTypeKey contains openebs volume type i.e. jiva/cstor
+	VolumeTypeKey CASKey = "openebs.io/castype"
 )
 
 // DeprecatedKey is a typed string to represent deprecated annotations' or

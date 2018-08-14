@@ -121,7 +121,7 @@ const (
 	JivaVolumeType VolumeType = "jiva"
 
 	// CStorVolumeType represents a cstor volume
-	//CStorVolumeType VolumeType = "cstor"
+	CStorVolumeType VolumeType = "cstor"
 )
 
 // VolumeContext defines context of a volume

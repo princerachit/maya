@@ -56,9 +56,9 @@ func (c *CmdSnaphotOptions) Validate(cmd *cobra.Command) error {
 }
 
 //CreateSnapshot creates snapshots
-func CreateSnapshot(volName, snapName string) (*api.VolumeCommand, error) {
+func CreateSnapshot(volName, snapName, ip string) (*api.VolumeCommand, error) {
 	var conn *grpc.ClientConn
-	conn, err := grpc.Dial(fmt.Sprintf(":%d", api.VolumeGrpcListenPort), grpc.WithInsecure())
+	conn, err := grpc.Dial(fmt.Sprintf("%s:%d", ip, api.VolumeGrpcListenPort), grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("did not connect: %s", err)
 	}
@@ -82,9 +82,9 @@ func CreateSnapshot(volName, snapName string) (*api.VolumeCommand, error) {
 }
 
 //DestroySnapshot destroys snapshots
-func DestroySnapshot(volName, snapName string) (*api.VolumeCommand, error) {
+func DestroySnapshot(volName, snapName, ip string) (*api.VolumeCommand, error) {
 	var conn *grpc.ClientConn
-	conn, err := grpc.Dial(fmt.Sprintf(":%d", api.VolumeGrpcListenPort), grpc.WithInsecure())
+	conn, err := grpc.Dial(fmt.Sprintf("%s:%d", ip, api.VolumeGrpcListenPort), grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("did not connect: %s", err)
 	}
@@ -110,7 +110,7 @@ func DestroySnapshot(volName, snapName string) (*api.VolumeCommand, error) {
 // RunSnapshotCreate does tasks related to grpc snapshot create.
 func (c *CmdSnaphotOptions) RunSnapshotCreate(cmd *cobra.Command) error {
 	fmt.Println("Executing volume snapshot create...")
-	resp, err := CreateSnapshot(c.volName, c.snapName)
+	resp, err := CreateSnapshot(c.volName, c.snapName, "localhost")
 	if err != nil {
 		return fmt.Errorf("Snapshot create failed: %v", err)
 	}
@@ -125,7 +125,7 @@ func (c *CmdSnaphotOptions) RunSnapshotCreate(cmd *cobra.Command) error {
 //RunSnapshotDestroy will initiate deletion of snapshot
 func (c *CmdSnaphotOptions) RunSnapshotDestroy(cmd *cobra.Command) error {
 	fmt.Println("Executing snapshot destroy...")
-	resp, err := DestroySnapshot(c.volName, c.snapName)
+	resp, err := DestroySnapshot(c.volName, c.snapName, "localhost")
 	if err != nil {
 		return fmt.Errorf("Error: %v", resp)
 	}
