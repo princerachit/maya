@@ -268,11 +268,11 @@ func jivaDelete(resp http.ResponseWriter, req *http.Request, snap v1.VolumeSnaps
 }
 
 func cStorDelete(resp http.ResponseWriter, req *http.Request, snap v1.VolumeSnapshot) (interface{}, error) {
-	glog.Infof("[DEBUG] cStorSnapshotDelete called")
+	glog.Infof("[DEBUG] cStorSnapshotDelete called. Header values : %v", req.Header)
 	targetIP, err := getTargetIP(resp, req, snap.Spec.VolumeName)
 	if err != nil {
 		return nil, err
 	}
 
-	return cstor.DeleteSnapshot(snap.Spec.VolumeName, snap.Spec.SnapshotDataName, targetIP)
+	return cstor.DeleteSnapshot(snap.Spec.VolumeName, snap.Metadata.Name, targetIP)
 }
