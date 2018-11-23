@@ -391,6 +391,7 @@ spec:
                     values:
                     - {{ $targetAffinityVal }}
                 topologyKey: kubernetes.io/hostname
+                namespaces: [{{.Volume.runNamespace}}]
           {{- end }}
           containers:
           - image: {{ .Config.VolumeTargetImage.value }}
